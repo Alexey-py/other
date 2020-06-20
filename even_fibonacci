@@ -1,0 +1,13 @@
+def fibonacci():
+    f1,f2 = 0, 1
+    even = 0  
+    while True:         
+      if f1 == 0 or f1 % 2 == 0:
+        even = f1
+        yield even  
+      f1, f2 = f2, f1 + f2 
+gen = fibonacci()
+n = int(input('f(n) = '))
+print(f'f({n})')
+for i in range(n):
+  print(next(gen), end = ' ')
