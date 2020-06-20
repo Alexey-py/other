@@ -1,0 +1,151 @@
+def romanian_to_arabic(value):
+    Roma = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
+    count = 0
+    res = 0
+    for character in list(reversed(value)):
+        if character == '-':
+            res = -res
+            break
+        if Roma[character] >= count:
+            res += Roma[character]
+            count = Roma[character]
+        else:
+            res = res - Roma[character]
+    return res
+
+def arabic_to_romanian(value):
+    Roma = [
+        ('I', 1),
+        ('IV', 4),
+        ('V', 5),
+        ('IX', 9),
+        ('X', 10),
+        ('XL', 40),
+        ('L', 50),
+        ('XC', 90),
+        ('C', 100),
+        ('CD', 400),
+        ('D', 500),
+        ('CM', 900),
+        ('M', 1000),
+    ]
+    result = ''
+    if value < 0:
+        result += '-'
+        value = abs(value)
+    for sign, number in reversed(Roma):
+        count, value = divmod(value, number)
+        result += sign * count
+    return result
+
+class RomaNum:
+    def __init__(self, value):
+        self.value = romanian_to_arabic(value)
+
+    def __repr__(self):
+        return f'answer = {arabic_to_romanian(self.value)}'
+
+#Arithmetic operators
+
+    def __add__(self, other):
+        if isinstance(other, RomaNum):
+            return RomaNum(arabic_to_romanian(self.value + other.value))
+        else:
+            return RomaNum(arabic_to_romanian(self.value + other))
+
+    def __radd__(self, other):
+        if isinstance(other, RomaNum):
+            return RomaNum(arabic_to_romanian(self.value + other.value))
+        else:
+            return RomaNum(arabic_to_romanian(self.value + other))
+
+    def __iadd__(self, other):
+        self.value += other.value
+        return self
+#----------------------------------------------------------------------------------------
+    def __sub__(self, other):
+        res = self.value - other.value
+        return RomaNum(arabic_to_romanian(res))
+    def __isub__(self, other):
+        self.value -= other.value
+        return self
+#----------------------------------------------------------------------------------------
+    def __mul__(self, other):
+        res = self.value * other.value
+        return RomaNum(arabic_to_romanian(res))
+    def __imul__(self, other):
+        self.value *= other.value
+        return self
+#----------------------------------------------------------------------------------------
+    def __truediv__(self, other):
+        return self.value / other.value
+    def __itruediv__(self, other):
+        self.value /= other.value
+        return self
+
+#---------------------------------------------------------------------------------------
+    def __floordiv__(self, other):
+        res = self.value // other.value
+        return RomaNum(arabic_to_romanian(res))
+    def __ifloordiv__(self, other):
+        self.value //= other.value
+        return self
+#---------------------------------------------------------------------------------------
+    def __mod__(self, other):
+        res = self.value % other.value
+        return RomaNum(arabic_to_romanian(res))
+#---------------------------------------------------------------------------------------
+    def __pow__(self, power, modulo=None):
+        res = self.value ** power.value
+        return RomaNum(arabic_to_romanian(res))
+    def __ipow__(self, other):
+        self.value **= other.value
+        return self
+#---------------------------------------------------------------------------------------
+    def __lshift__(self, other):
+        res = self.value << other.value
+        return RomaNum(arabic_to_romanian(res))
+    def __rshift__(self, other):
+        res = self.value >> other.value
+        return RomaNum(arabic_to_romanian(res))
+    def __and__(self, other):
+        res = self.value & other.value
+        return RomaNum(arabic_to_romanian(res))
+    def __xor__(self, other):
+        res = self.value ^ other.value
+        return RomaNum(arabic_to_romanian(res))
+    def __or__(self, other):
+        res = self.value | other.value
+        return RomaNum(arabic_to_romanian(res))
+    def __neg__(self):
+        return RomaNum(arabic_to_romanian(-self.value))
+    def __invert__(self):
+        return RomaNum(arabic_to_romanian(~self.value))
+
+
+#Relationship Operators
+
+    def __lt__(self, other):
+        return self.value < other.value
+    def __gt__(self, other):
+        return self.value > other.value
+    def __le__(self, other):
+        return self.value <= other.value
+    def __ge__(self, other):
+        return self.value >= other.value
+    def __eq__(self, other):
+        return self.value == other.value
+    def __ne__(self, other):
+        return self.value != other.value
+
+
+
+
+def main():
+    x = RomaNum('X')
+    y = RomaNum('III')
+
+    print(x + 5)
+
+if __name__ == '__main__':
+    main()
